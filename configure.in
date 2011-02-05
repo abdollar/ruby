@@ -635,7 +635,7 @@ AC_CHECK_FUNCS(fmod killpg wait4 waitpid syscall chroot fsync getcwd eaccess\
 	      truncate ftruncate chsize times utimes fcntl lockf lstat symlink link\
 	      readlink setitimer setruid seteuid setreuid setresuid\
 	      setproctitle setrgid setegid setregid setresgid issetugid pause\
-	      lchown lchmod getpgrp setpgrp getpgid setpgid initgroups\
+	      lchown lchmod getpgrp getpgid setpgid initgroups\
 	      getgroups setgroups getpriority getrlimit setrlimit sysconf\
 	      group_member dlopen sigprocmask\
 	      sigaction sigsetjmp _setjmp _longjmp setsid telldir seekdir fchmod\
@@ -831,7 +831,6 @@ main()
 fi
 
 AC_FUNC_GETPGRP
-AC_FUNC_SETPGRP  
 
 AC_C_BIGENDIAN
 AC_C_CONST

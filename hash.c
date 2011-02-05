@@ -17,9 +17,9 @@
 #include "util.h"
 #include "rubysig.h"
 
-#ifdef __APPLE__
-#include <crt_externs.h>
-#endif
+//#ifdef __APPLE__
+//#include <crt_externs.h>
+//#endif
 
 #define HASH_DELETED  FL_USER1
 #define HASH_PROC_DEFAULT FL_USER2
@@ -1787,7 +1787,7 @@ rb_hash_merge(hash1, hash2)
 static int path_tainted = -1;
 
 static char **origenviron;
-#ifdef _WIN32
+/*#ifdef _WIN32
 #define GET_ENVIRON(e) (e = rb_w32_get_environ())
 #define FREE_ENVIRON(e) rb_w32_free_environ(e)
 static char **my_environ;
@@ -1799,10 +1799,10 @@ static char **my_environ;
 #define GET_ENVIRON(e) (e)
 #define FREE_ENVIRON(e)
 #else
-extern char **environ;
+*/extern char **environ;
 #define GET_ENVIRON(e) (e)
 #define FREE_ENVIRON(e)
-#endif
+//#endif
 
 static VALUE
 env_str_new(ptr, len)

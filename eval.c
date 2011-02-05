@@ -33,9 +33,9 @@
 #include "st.h"
 #include "dln.h"
 
-#ifdef __APPLE__
-#include <crt_externs.h>
-#endif
+//#ifdef __APPLE__
+//#include <crt_externs.h>
+//#endif
 
 /* Make alloca work the best possible way.  */
 #ifdef __GNUC__
@@ -1391,11 +1391,11 @@ ruby_init()
     ruby_frame = top_frame = &frame;
     ruby_iter = &iter;
 
-#ifdef __MACOS__
+//#ifdef __MACOS__
     rb_origenviron = 0;
-#else
-    rb_origenviron = environ;
-#endif
+//#else
+//    rb_origenviron = environ;
+//#endif
 
     Init_stack((void*)&state);
     Init_heap();

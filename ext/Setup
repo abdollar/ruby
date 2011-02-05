@@ -1,4 +1,4 @@
-#option nodynamic
+option nodynamic
 
 #Win32API
 #bigdecimal
@@ -18,11 +18,11 @@
 #io/wait
 #nkf
 #pty
-#openssl
+openssl
 #racc/cparse
 #readline
 #sdbm
-#socket
+socket
 #stringio
 #strscan
 #syck
@@ -31,4 +31,4 @@
 #thread
 #tk
 #win32ole
-#zlib
+zlib

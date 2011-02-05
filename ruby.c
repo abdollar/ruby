@@ -250,91 +250,10 @@ ruby_incpush(path)
 #endif
 
 void
-ruby_init_loadpath()
+ruby_init_loadpath(const char* mypath)
 {
-#if defined LOAD_RELATIVE
-    char libpath[FILENAME_MAX+1];
-    char *p;
-    int rest;
-#if defined _WIN32 || defined __CYGWIN__
-    HMODULE libruby = NULL;
-    MEMORY_BASIC_INFORMATION m;
-
-#ifndef _WIN32_WCE
-    memset(&m, 0, sizeof(m));
-    if (VirtualQuery(ruby_init_loadpath, &m, sizeof(m)) && m.State == MEM_COMMIT)
-	libruby = (HMODULE)m.AllocationBase;
-#endif
-    GetModuleFileName(libruby, libpath, sizeof libpath);
-#elif defined(DJGPP)
-    extern char *__dos_argv0;
-    strncpy(libpath, __dos_argv0, FILENAME_MAX);
-#elif defined(__human68k__)
-    extern char **_argv;
-    strncpy(libpath, _argv[0], FILENAME_MAX);
-#elif defined(__EMX__)
-    _execname(libpath, FILENAME_MAX);
-#endif
-
-    libpath[FILENAME_MAX] = '\0';
-#if defined DOSISH
-    translate_char(libpath, '\\', '/');
-#elif defined __CYGWIN__
-    {
-	char rubylib[FILENAME_MAX];
-	cygwin_conv_to_posix_path(libpath, rubylib);
-	strncpy(libpath, rubylib, sizeof(libpath));
-    }
-#endif
-    p = strrchr(libpath, '/');
-    if (p) {
-	*p = 0;
-	if (p - libpath > 3 && !strcasecmp(p - 4, "/bin")) {
-	    p -= 4;
-	    *p = 0;
-	}
-    }
-    else {
-	strcpy(libpath, ".");
-	p = libpath + 1;
-    }
-
-    rest = FILENAME_MAX - (p - libpath);
-
-#define RUBY_RELATIVE(path) (strncpy(p, (path), rest), libpath)
-#else
-#define RUBY_RELATIVE(path) (path)
-#endif
 #define incpush(path) rb_ary_push(rb_load_path, rubylib_mangled_path2(path))
-
-    if (rb_safe_level() == 0) {
-	ruby_incpush(getenv("RUBYLIB"));
-    }
-
-#ifdef RUBY_SEARCH_PATH
-    incpush(RUBY_RELATIVE(RUBY_SEARCH_PATH));
-#endif
-
-    incpush(RUBY_RELATIVE(RUBY_SITE_LIB2));
-#ifdef RUBY_SITE_THIN_ARCHLIB
-    incpush(RUBY_RELATIVE(RUBY_SITE_THIN_ARCHLIB));
-#endif
-    incpush(RUBY_RELATIVE(RUBY_SITE_ARCHLIB));
-    incpush(RUBY_RELATIVE(RUBY_SITE_LIB));
-
-    incpush(RUBY_RELATIVE(RUBY_VENDOR_LIB2));
-#ifdef RUBY_VENDOR_THIN_ARCHLIB
-    incpush(RUBY_RELATIVE(RUBY_VENDOR_THIN_ARCHLIB));
-#endif
-    incpush(RUBY_RELATIVE(RUBY_VENDOR_ARCHLIB));
-    incpush(RUBY_RELATIVE(RUBY_VENDOR_LIB));
-
-    incpush(RUBY_RELATIVE(RUBY_LIB));
-#ifdef RUBY_THIN_ARCHLIB
-    incpush(RUBY_RELATIVE(RUBY_THIN_ARCHLIB));
-#endif
-    incpush(RUBY_RELATIVE(RUBY_ARCHLIB));
-
+    incpush(mypath);
     if (rb_safe_level() == 0) {
 	incpush(".");
     }
@@ -840,7 +759,7 @@ proc_options(argc, argv)
     ruby_set_argv(argc, argv);
     process_sflag();
 
-    ruby_init_loadpath();
+    ruby_init_loadpath(NULL);
     ruby_sourcefile = rb_source_filename(argv0);
     if (e_script) {
 	require_libraries();

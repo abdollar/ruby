@@ -33,9 +33,6 @@
 # define pseudo_AF_FTIP pseudo_AF_RTIP	/* workaround for NetBSD and etc. */
 #endif
 #include <netinet/in.h>
-#ifdef HAVE_NETINET_IN_SYSTM_H
-# include <netinet/in_systm.h>
-#endif
 #ifdef HAVE_NETINET_TCP_H
 # include <netinet/tcp.h>
 #endif
