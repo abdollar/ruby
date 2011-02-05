@@ -1,3 +1,29 @@
+Thu Dec 23 12:22:35 2010  Tanaka Akira  <akr@fsij.org>
+
+	* lib/resolv.rb (Resolv::IPv4::Regex): make it only accept 0 to 255.
+	  [ruby-core:29501]
+
+Tue Dec 21 01:43:01 2010  NAKAMURA, Hiroshi  <nahi@ruby-lang.org>
+
+	* lib/webrick/https.rb: uninitialized instance variables.
+	  Backport a part of r20864 for ruby_1_8.
+
+Sat Dec  4 11:35:15 2010  Nobuyoshi Nakada  <nobu@ruby-lang.org>
+
+	* lib/mkmf.rb (init_mkmf): needs default library path even if
+	  cross compiling.
+
+Sat Dec  4 11:25:02 2010  NAKAMURA Usaku  <usa@ruby-lang.org>
+
+	* re.c (rb_reg_regcomp): should succeed the taint status from the
+	  origin. [ruby-core:33338]
+
+Thu Dec  2 21:13:42 2010  URABE Shyouhei  <shyouhei@ruby-lang.org>
+
+	* Makefile.in (fake.rb): need to expand the topdir in case of it
+	  being relative, a patch from Luis Lavena <luislavena at gmail.com>.
+	  [ruby-core:33466]
+
 Wed Nov 24 18:24:26 2010  NAKAMURA Usaku  <usa@ruby-lang.org>
 
 	* ext/socket/extconf.rb: backrorted entirely from ruby_1_8, with small
