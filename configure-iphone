@@ -1,0 +1,70 @@
+#! /bin/sh
+
+### Copyright (c) 2010 by James Long, All Rights Reserved.
+
+prefix="/usr/local/iphone"
+type="simulator"
+version="$1"
+shift
+
+usage() {
+    echo "Usage: `basename $0` <version> [-d <dir>] [-t <target-type>] -- [configure-args ...]"
+    echo ''
+    echo '   `version` -- iPhone software version (3.1.2, 3.2, etc.)'
+    echo '   `dir` -- prefix for iphone software directory (default /usr/local/iphone)'
+    echo '   `host` -- target host, must be "simulator" or "os" (defaults to "simulator")'
+    exit 1;
+}
+
+simulator() {
+    [ ! "$type" == "OS" ];
+}
+
+while getopts 'd:v:t:' o; do
+    case "$o" in
+        d) prefix="$OPTARG";;
+        v) version="$OPTARG";;
+        t) type="$OPTARG";;
+        ?) usage
+    esac
+done
+shift $(($OPTIND - 1))
+
+if [ -z "$version" ]; then
+    usage
+fi
+
+mkdir -p "$prefix"
+
+if [ "$type" == "simulator" ]; then
+    type="Simulator"
+else
+    type="OS"
+fi
+
+if simulator; then
+    prefix="$prefix/iPhoneSimulator$version"
+else
+    prefix="$prefix/iPhoneOS$version"
+fi
+
+if [ ! -d "/Developer/Platforms/iPhone$type.platform/Developer/SDKs/iPhone$type$version.sdk" ]; then
+    echo "Invalid iPhone OS version: $version"
+    exit
+fi
+
+if simulator; then
+    export CC="/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/gcc-4.2 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator$version.sdk"
+    export CXX="/Developer/Platforms/iPhoneSimulator.platform/Developer/usr/bin/g++-4.2 -isysroot /Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator$version.sdk"
+    export CFLAGS="-arch i386 -Wno-trigraphs -Wreturn-type -Wunused-variable -I$prefix/include -L/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator$version.sdk/usr/lib"
+    export CXXFLAGS="$CFLAGS"
+    ./configure --prefix="$prefix" "$@"
+else
+    export CC="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-gcc-4.2.1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk"
+    export CXX="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-g++-4.2.1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk"
+    export CFLAGS="-Wno-trigraphs -Wreturn-type -Wunused-variable -I$prefix/include -L/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk/usr/lib"
+    export CXXFLAGS="$CFLAGS"
+    export LDFLAGS=""
+    ##   possibly? -mthumb
+    ./configure --host=arm-apple-darwin --prefix="$prefix" "$@"
+fi
