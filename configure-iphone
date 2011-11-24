@@ -60,8 +60,8 @@ if simulator; then
     export CXXFLAGS="$CFLAGS"
     ./configure --prefix="$prefix" "$@"
 else
-    export CC="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-gcc-4.2.1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk"
-    export CXX="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-g++-4.2.1 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk"
+    export CC="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-llvm-gcc-4.2 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk"
+    export CXX="/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin/arm-apple-darwin10-llvm-g++-4.2 -isysroot /Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk"
     export CFLAGS="-Wno-trigraphs -Wreturn-type -Wunused-variable -I$prefix/include -L/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS$version.sdk/usr/lib"
     export CXXFLAGS="$CFLAGS"
     export LDFLAGS=""
